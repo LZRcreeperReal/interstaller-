@@ -6,17 +6,19 @@
     <title>Huna 7</title>
     <style>
         body {
-            background-color: #392d55;
+            background-color: #392d55; /* Midnight theme */
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             text-align: center;
             transition: background-color 0.3s, color 0.3s;
+            position: relative;
+            overflow-x: hidden;
         }
         h1 {
             font-size: 3em;
@@ -31,17 +33,21 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
+            z-index: 1;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 5px;
-            background-color: #fff; /* Fallback for iframe content */
+            background-color: #fff;
         }
         .controls {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
+            z-index: 1;
         }
         button {
             padding: 10px 20px;
@@ -55,58 +61,234 @@
         button:hover {
             background-color: #6b5a8e;
         }
-        /* Darker theme variant */
-        .dark-theme {
+
+        /* Night Theme */
+        .night-theme {
             background-color: #1c162f;
             color: #d0c8e8;
         }
-        .dark-theme .iframe-container {
+        .night-theme .iframe-container {
             background-color: #2f254a;
         }
-        .dark-theme button {
+        .night-theme button {
             background-color: #4a3b6a;
         }
-        .dark-theme button:hover {
+        .night-theme button:hover {
             background-color: #5c4b7d;
+        }
+
+        /* Light Theme */
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .light-theme .iframe-container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .light-theme button {
+            background-color: #4a90e2;
+        }
+        .light-theme button:hover {
+            background-color: #357abd;
+        }
+        .light-theme h1 {
+            text-shadow: none;
+        }
+
+        /* Halloween Theme */
+        .halloween-theme {
+            background-color: #1a1a1a;
+            color: #ff7518;
+            background-image: linear-gradient(to bottom, #ff7518, #1a1a1a);
+        }
+        .halloween-theme .iframe-container {
+            background-color: #2e2e2e;
+        }
+        .halloween-theme button {
+            background-color: #ff7518;
+        }
+        .halloween-theme button:hover {
+            background-color: #e06615;
+        }
+        .halloween-theme h1 {
+            text-shadow: 0 0 10px #ff7518;
+        }
+        .halloween-decoration {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 0;
+        }
+        .halloween-decoration:hover {
+            transform: scale(1.2);
+        }
+        .pumpkin-bottom-left {
+            bottom: 10px;
+            left: 10px;
+            background: url('https://img.icons8.com/color/48/000000/pumpkin.png') no-repeat center;
+            background-size: contain;
+        }
+        .candy-bottom-right {
+            bottom: 10px;
+            right: 10px;
+            background: url('https://img.icons8.com/color/48/000000/candy.png') no-repeat center;
+            background-size: contain;
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Christmas Theme */
+        .christmas-theme {
+            background-color: #87CEEB; /* Light blue sky */
+            color: #fff;
+            background-image: linear-gradient(to bottom, #87CEEB, #4682B4);
+        }
+        .christmas-theme .iframe-container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .christmas-theme button {
+            background-color: #c0392b;
+        }
+        .christmas-theme button:hover {
+            background-color: #a93226;
+        }
+        .christmas-theme h1 {
+            text-shadow: 0 0 10px #fff;
+        }
+        .christmas-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: repeating-linear-gradient(
+                45deg,
+                #ff0000,
+                #ff0000 10px,
+                #00ff00 10px,
+                #00ff00 20px
+            );
+            animation: swapColors 1s infinite;
+            z-index: 2;
+        }
+        @keyframes swapColors {
+            0% { background-position: 0 0; }
+            50% { background-position: 20px 0; }
+            100% { background-position: 0 0; }
+        }
+        .snowflake {
+            position: fixed;
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #000;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0.5; }
         }
     </style>
 </head>
 <body>
+    <div class="christmas-lights" style="display: none;"></div>
     <h1>Huna 7</h1>
     <div class="iframe-container">
         <iframe src="https://duckduckgo.com/" title="DuckDuckGo Search"></iframe>
     </div>
     <div class="controls">
-        <button onclick="toggleTheme()">Toggle Theme</button>
-        <button onclick="applyTabCloaking()">Apply Tab Cloaking</button>
+        <button onclick="setTheme('midnight')">Midnight</button>
+        <button onclick="setTheme('night')">Night</button>
+        <button onclick="setTheme('light')">Light</button>
+        <button onclick="setTheme('halloween')">Halloween</button>
+        <button onclick="setTheme('christmas')">Christmas</button>
+        <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank Cloaking</button>
     </div>
+    <div class="halloween-decoration pumpkin-bottom-left" style="display: none;" onclick="animateDecoration(this)"></div>
+    <div class="halloween-decoration candy-bottom-right" style="display: none;" onclick="animateDecoration(this)"></div>
 
     <script>
-        // Theme toggle functionality
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');
-            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'default');
+        // Theme management
+        function setTheme(theme) {
+            document.body.className = ''; // Reset classes
+            document.querySelector('.christmas-lights').style.display = 'none';
+            document.querySelector('.pumpkin-bottom-left').style.display = 'none';
+            document.querySelector('.candy-bottom-right').style.display = 'none';
+            document.querySelectorAll('.snowflake').forEach(s => s.remove());
+
+            if (theme === 'night') {
+                document.body.classList.add('night-theme');
+            } else if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            } else if (theme === 'halloween') {
+                document.body.classList.add('halloween-theme');
+                document.querySelector('.pumpkin-bottom-left').style.display = 'block';
+                document.querySelector('.candy-bottom-right').style.display = 'block';
+            } else if (theme === 'christmas') {
+                document.body.classList.add('christmas-theme');
+                document.querySelector('.christmas-lights').style.display = 'block';
+                startSnowfall();
+            } else {
+                document.body.classList.add('midnight-theme'); // Default
+            }
+            localStorage.setItem('theme', theme);
         }
 
-        // Load saved theme on page load
+        // Load saved theme
         window.onload = function() {
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-theme');
-            }
+            const savedTheme = localStorage.getItem('theme') || 'midnight';
+            setTheme(savedTheme);
         };
 
-        // Tab cloaking: Change the page title and favicon
+        // Halloween decoration animation
+        function animateDecoration(element) {
+            element.style.transform = 'scale(1.5)';
+            element.classList.add('shake');
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+                element.classList.remove('shake');
+            }, 500);
+        }
+
+        // Christmas snowfall
+        function startSnowfall() {
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(snowflake);
+            }
+        }
+
+        // Tab cloaking
         function applyTabCloaking() {
-            document.title = "Google"; // Mimics a generic site title
+            document.title = 'Google';
             const favicon = document.createElement('link');
             favicon.rel = 'icon';
-            favicon.href = 'https://www.google.com/favicon.ico'; // Google favicon
+            favicon.href = 'https://www.google.com/favicon.ico';
             document.head.appendChild(favicon);
             alert('Tab cloaking applied: Title set to "Google" with Google favicon.');
         }
 
-        // About:Blank cloaking: Open a new window with about:blank and embed the current page
+        // About:Blank cloaking
         function applyAboutBlankCloaking() {
             const newWindow = window.open('about:blank', '_blank');
             if (newWindow) {
