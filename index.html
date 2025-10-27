@@ -23,24 +23,25 @@
             margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
-        .search-container {
+        .iframe-container {
+            width: 90%;
+            height: 70vh;
             background-color: #2a1f42;
-            padding: 20px;
+            padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
         }
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
+        iframe {
+            width: 100%;
+            height: 100%;
             border: none;
             border-radius: 5px;
-            background-color: #4a3b6a;
-            color: #fff;
-            font-size: 1em;
+            background-color: #fff; /* Fallback for iframe content */
         }
-        input[type="text"]::placeholder {
-            color: #b0a8c8;
+        .controls {
+            display: flex;
+            gap: 10px;
         }
         button {
             padding: 10px 20px;
@@ -50,19 +51,8 @@
             color: #fff;
             font-size: 1em;
             cursor: pointer;
-            margin-left: 10px;
         }
         button:hover {
-            background-color: #6b5a8e;
-        }
-        .theme-toggle, .cloak-options {
-            margin-top: 20px;
-        }
-        .theme-toggle button, .cloak-options button {
-            background-color: #5c4b7d;
-            margin: 5px;
-        }
-        .theme-toggle button:hover, .cloak-options button:hover {
             background-color: #6b5a8e;
         }
         /* Darker theme variant */
@@ -70,11 +60,8 @@
             background-color: #1c162f;
             color: #d0c8e8;
         }
-        .dark-theme .search-container {
+        .dark-theme .iframe-container {
             background-color: #2f254a;
-        }
-        .dark-theme input[type="text"] {
-            background-color: #3b2e5a;
         }
         .dark-theme button {
             background-color: #4a3b6a;
@@ -86,16 +73,11 @@
 </head>
 <body>
     <h1>Huna 7</h1>
-    <div class="search-container">
-        <form id="search-form" action="https://duckduckgo.com/" method="get" target="_blank">
-            <input type="text" name="q" placeholder="Search with DuckDuckGo..." required>
-            <button type="submit">Search</button>
-        </form>
+    <div class="iframe-container">
+        <iframe src="https://duckduckgo.com/" title="DuckDuckGo Search"></iframe>
     </div>
-    <div class="theme-toggle">
+    <div class="controls">
         <button onclick="toggleTheme()">Toggle Theme</button>
-    </div>
-    <div class="cloak-options">
         <button onclick="applyTabCloaking()">Apply Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank Cloaking</button>
     </div>
@@ -119,9 +101,9 @@
             document.title = "Google"; // Mimics a generic site title
             const favicon = document.createElement('link');
             favicon.rel = 'icon';
-            favicon.href = 'https://www.google.com/favicon.ico'; // Example favicon
+            favicon.href = 'https://www.google.com/favicon.ico'; // Google favicon
             document.head.appendChild(favicon);
-            alert('Tab cloaking applied: Title set to "Google" with a new favicon.');
+            alert('Tab cloaking applied: Title set to "Google" with Google favicon.');
         }
 
         // About:Blank cloaking: Open a new window with about:blank and embed the current page
@@ -146,11 +128,6 @@
                 alert('Failed to open about:blank window. Ensure pop-ups are allowed.');
             }
         }
-
-        // Log search submission (for debugging or future enhancements)
-        document.getElementById('search-form').addEventListener('submit', function(e) {
-            console.log('Search submitted:', document.querySelector('input[name="q"]').value);
-        });
     </script>
 </body>
 </html>
