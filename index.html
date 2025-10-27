@@ -22,17 +22,19 @@
         }
         h1 {
             font-size: 3em;
-            margin-bottom: 20px;
+            margin: 20px 0;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            z-index: 3; /* Ensure title is above decorations */
         }
         .iframe-container {
             width: 90%;
+            max-width: 1200px;
             height: 70vh;
             background-color: #2a1f42;
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
+            margin: 20px 0;
             z-index: 1;
         }
         iframe {
@@ -45,21 +47,26 @@
         .controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
-            z-index: 1;
+            margin-bottom: 20px;
+            z-index: 3; /* Ensure buttons are above decorations */
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             background-color: #5c4b7d;
             color: #fff;
-            font-size: 1em;
+            font-size: 1.1em;
+            font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         button:hover {
             background-color: #6b5a8e;
+            transform: scale(1.05);
         }
 
         /* Night Theme */
@@ -88,6 +95,7 @@
         }
         .light-theme button {
             background-color: #4a90e2;
+            color: #fff;
         }
         .light-theme button:hover {
             background-color: #357abd;
@@ -107,6 +115,7 @@
         }
         .halloween-theme button {
             background-color: #ff7518;
+            color: #fff;
         }
         .halloween-theme button:hover {
             background-color: #e06615;
@@ -116,24 +125,24 @@
         }
         .halloween-decoration {
             position: fixed;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             cursor: pointer;
             transition: transform 0.3s;
-            z-index: 0;
+            z-index: 2;
         }
         .halloween-decoration:hover {
             transform: scale(1.2);
         }
         .pumpkin-bottom-left {
-            bottom: 10px;
-            left: 10px;
+            bottom: 15px;
+            left: 15px;
             background: url('https://img.icons8.com/color/48/000000/pumpkin.png') no-repeat center;
             background-size: contain;
         }
         .candy-bottom-right {
-            bottom: 10px;
-            right: 10px;
+            bottom: 15px;
+            right: 15px;
             background: url('https://img.icons8.com/color/48/000000/candy.png') no-repeat center;
             background-size: contain;
         }
@@ -150,7 +159,7 @@
 
         /* Christmas Theme */
         .christmas-theme {
-            background-color: #87CEEB; /* Light blue sky */
+            background-color: #87CEEB;
             color: #fff;
             background-image: linear-gradient(to bottom, #87CEEB, #4682B4);
         }
@@ -181,7 +190,7 @@
                 #00ff00 20px
             );
             animation: swapColors 1s infinite;
-            z-index: 2;
+            z-index: 4;
         }
         @keyframes swapColors {
             0% { background-position: 0 0; }
@@ -244,15 +253,17 @@
                 document.querySelector('.christmas-lights').style.display = 'block';
                 startSnowfall();
             } else {
-                document.body.classList.add('midnight-theme'); // Default
+                document.body.classList.add('midnight-theme');
             }
             localStorage.setItem('theme', theme);
+            console.log(`Theme set to: ${theme}`); // Debug theme change
         }
 
         // Load saved theme
         window.onload = function() {
             const savedTheme = localStorage.getItem('theme') || 'midnight';
             setTheme(savedTheme);
+            console.log('Controls loaded:', document.querySelectorAll('.controls button').length, 'buttons'); // Debug button count
         };
 
         // Halloween decoration animation
