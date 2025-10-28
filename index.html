@@ -36,6 +36,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
             margin: 20px 0;
             z-index: 1;
+            position: relative;
         }
         iframe {
             width: 100%;
@@ -99,29 +100,31 @@
         .christmas-theme button:hover { background:#a93226; }
         .christmas-theme h1 { text-shadow:0 0 10px #fff; }
 
-        /* ---------- CHRISTMAS LIGHTS (REAL PNG) ---------- */
+        /* ---------- CHRISTMAS LIGHTS (FIXED PNG) ---------- */
         .christmas-lights {
             position: fixed;
             top: 0; left: 0;
             width: 100%;
             height: 50px;
-            background: url('https://i.imgur.com/9t3hR5P.png') repeat-x center/40px 40px;
+            background: url('https://i.ibb.co/3d3hY6J/christmas-lights-png-transparent.png') repeat-x center / 45px auto;
+            background-position: 0 8px;
             z-index: 4;
             display: none;
-            filter: hue-rotate(0deg);
             animation: swapLights 2s infinite;
         }
         @keyframes swapLights {
-            0%, 49%   { filter: hue-rotate(0deg); }   /* red to green */
-            50%, 100% { filter: hue-rotate(120deg); } /* green to red */
+            0%, 49%   { filter: hue-rotate(0deg); }     /* Red to Green */
+            50%, 100% { filter: hue-rotate(120deg); }   /* Green to Red */
         }
 
+        /* ---------- HALLOWEEN DECORATIONS ---------- */
         .halloween-decoration {
             position: fixed;
             width: 60px; height: 60px;
             cursor: pointer;
             transition: transform .3s;
             z-index: 2;
+            display: none;
         }
         .halloween-decoration:hover { transform: scale(1.2); }
         .pumpkin-bottom-left {
@@ -138,24 +141,32 @@
             50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}
         }
 
+        /* ---------- SNOWFLAKES (FIXED) ---------- */
         .snowflake {
-            position:fixed; color:#fff; font-size:1em;
-            text-shadow:0 0 5px #000; pointer-events:none;
-            animation:fall linear infinite; z-index:0;
+            position: fixed;
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 5px #000;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 0;
+            user-select: none;
         }
         @keyframes fall {
-            0%{transform:translateY(-10vh);opacity:1}
-            100%{transform:translateY(100vh);opacity:.5}
+            0%   { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <!-- Christmas Lights (Hidden by default) -->
     <div class="christmas-lights"></div>
 
     <h1>Nyx</h1>
 
     <div class="iframe-container">
-        <iframe src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
+        <iframe id="embedFrame" src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
                 sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
     </div>
 
@@ -165,10 +176,12 @@
         <button onclick="setTheme('light')">Light</button>
         <button onclick="setTheme('halloween')">Halloween</button>
         <button onclick="setTheme('christmas')">Christmas</button>
+        <button onclick="reloadEmbed()">Reload Embed</button>
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank</button>
     </div>
 
+    <!-- Halloween Decorations (Hidden by default) -->
     <div class="halloween-decoration pumpkin-bottom-left" onclick="animateDecoration(this)"></div>
     <div class="halloween-decoration candy-bottom-right" onclick="animateDecoration(this)"></div>
 
@@ -177,59 +190,80 @@
         function setTheme(theme) {
             document.body.className = '';
             document.querySelector('.christmas-lights').style.display = 'none';
-            document.querySelectorAll('.halloween-decoration').forEach(d=>d.style.display='none');
-            document.querySelectorAll('.snowflake').forEach(s=>s.remove());
+            document.querySelectorAll('.halloween-decoration').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.snowflake').forEach(s => s.remove());
 
-            if (theme==='night')   document.body.classList.add('night-theme');
-            else if (theme==='light')   document.body.classList.add('light-theme');
-            else if (theme==='halloween'){
+            if (theme === 'night') {
+                document.body.classList.add('night-theme');
+            } else if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            } else if (theme === 'halloween') {
                 document.body.classList.add('halloween-theme');
-                document.querySelectorAll('.halloween-decoration').forEach(d=>d.style.display='block');
-            }
-            else if (theme==='christmas'){
+                document.querySelectorAll('.halloween-decoration').forEach(d => d.style.display = 'block');
+            } else if (theme === 'christmas') {
                 document.body.classList.add('christmas-theme');
                 document.querySelector('.christmas-lights').style.display = 'block';
                 startSnowfall();
+            } else {
+                document.body.classList.add('midnight-theme');
             }
-            else document.body.classList.add('midnight-theme');
-
             localStorage.setItem('theme', theme);
         }
 
+        // Load saved theme
         window.onload = () => setTheme(localStorage.getItem('theme') || 'midnight');
 
-        // ---------- DECORATIONS ----------
-        function animateDecoration(el){
-            el.style.transform='scale(1.5)'; el.classList.add('shake');
-            setTimeout(()=>{ el.style.transform='scale(1)'; el.classList.remove('shake'); },500);
+        // ---------- RELOAD EMBED ONLY ----------
+        function reloadEmbed() {
+            const iframe = document.getElementById('embedFrame');
+            iframe.src = iframe.src; // Triggers reload
+            alert('Embed reloaded!');
         }
 
-        function startSnowfall(){
-            for(let i=0;i<50;i++){
-                const s=document.createElement('div');
-                s.className='snowflake'; s.innerHTML='snowflake';
-                s.style.left=Math.random()*100+'vw';
-                s.style.animationDuration=Math.random()*5+5+'s';
-                s.style.animationDelay=Math.random()*5+'s';
+        // ---------- DECORATIONS ----------
+        function animateDecoration(el) {
+            el.style.transform = 'scale(1.5)';
+            el.classList.add('shake');
+            setTimeout(() => {
+                el.style.transform = 'scale(1)';
+                el.classList.remove('shake');
+            }, 500);
+        }
+
+        // ---------- SNOWFALL (FIXED) ----------
+        function startSnowfall() {
+            const flakes = ['snowflake', 'snowflake', 'snowflake', 'snowflake', 'snowflake'];
+            for (let i = 0; i < 60; i++) {
+                const s = document.createElement('div');
+                s.className = 'snowflake';
+                s.innerHTML = flakes[Math.floor(Math.random() * flakes.length)];
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.animationDuration = Math.random() * 4 + 4 + 's';
+                s.style.animationDelay = Math.random() * 5 + 's';
+                s.style.fontSize = (Math.random() * 0.8 + 0.8) + 'em';
                 document.body.appendChild(s);
+
+                // Remove after animation
+                s.addEventListener('animationend', () => s.remove());
             }
         }
 
         // ---------- CLOAKING ----------
-        function applyTabCloaking(){
-            document.title='My Drive - Google Drive';
-            const link=document.createElement('link');
-            link.rel='icon'; link.href='https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
-            const old=document.querySelector("link[rel='icon']");
-            if(old) old.remove();
+        function applyTabCloaking() {
+            document.title = 'My Drive - Google Drive';
+            const link = document.createElement('link');
+            link.rel = 'icon';
+            link.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+            const old = document.querySelector("link[rel='icon']");
+            if (old) old.remove();
             document.head.appendChild(link);
             alert('Tab cloaked as Google Drive');
         }
 
-        function applyAboutBlankCloaking(){
-            const win=window.open('about:blank','_blank');
-            if(win){
-                const d=win.document;
+        function applyAboutBlankCloaking() {
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                const d = win.document;
                 d.open();
                 d.write(`<!DOCTYPE html><html><head><title>Nyx</title>
                 <style>body,html{margin:0;height:100%;overflow:hidden}
@@ -237,7 +271,9 @@
                 <body><iframe src="${location.href}" allowfullscreen></iframe></body></html>`);
                 d.close();
                 alert('Loaded in about:blank');
-            }else alert('Popup blocked! Allow popups.');
+            } else {
+                alert('Popup blocked! Allow popups.');
+            }
         }
     </script>
 </body>
