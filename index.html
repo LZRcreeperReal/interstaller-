@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huna 7</title>
+    <title>Nyx</title>
     <style>
         body {
             background-color: #392d55;
@@ -23,7 +23,7 @@
         h1 {
             font-size: 3em;
             margin: 20px 0;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
             z-index: 3;
         }
         .iframe-container {
@@ -33,7 +33,7 @@
             background-color: #2a1f42;
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
             margin: 20px 0;
             z-index: 1;
         }
@@ -61,168 +61,104 @@
             font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background-color .2s, transform .2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,.3);
         }
         button:hover {
             background-color: #6b5a8e;
             transform: scale(1.05);
         }
 
-        /* Night Theme */
-        .night-theme {
-            background-color: #1c162f;
-            color: #d0c8e8;
-        }
-        .night-theme .iframe-container {
-            background-color: #2f254a;
-        }
-        .night-theme button {
-            background-color: #4a3b6a;
-        }
-        .night-theme button:hover {
-            background-color: #5c4b7d;
-        }
+        /* ---------- THEMES ---------- */
+        .night-theme { background:#1c162f; color:#d0c8e8; }
+        .night-theme .iframe-container { background:#2f254a; }
+        .night-theme button { background:#4a3b6a; }
+        .night-theme button:hover { background:#5c4b7d; }
 
-        /* Light Theme */
-        .light-theme {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .light-theme .iframe-container {
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .light-theme button {
-            background-color: #4a90e2;
-            color: #fff;
-        }
-        .light-theme button:hover {
-            background-color: #357abd;
-        }
-        .light-theme h1 {
-            text-shadow: none;
-        }
+        .light-theme { background:#f0f0f0; color:#333; }
+        .light-theme .iframe-container { background:#fff; box-shadow:0 0 10px rgba(0,0,0,.2); }
+        .light-theme button { background:#4a90e2; color:#fff; }
+        .light-theme button:hover { background:#357abd; }
+        .light-theme h1 { text-shadow:none; }
 
-        /* Halloween Theme */
         .halloween-theme {
-            background-color: #1a1a1a;
-            color: #ff7518;
-            background-image: linear-gradient(to bottom, #ff7518, #1a1a1a);
+            background:#1a1a1a; color:#ff7518;
+            background-image:linear-gradient(to bottom,#ff7518,#1a1a1a);
         }
-        .halloween-theme .iframe-container {
-            background-color: #2e2e2e;
+        .halloween-theme .iframe-container { background:#2e2e2e; }
+        .halloween-theme button { background:#ff7518; color:#fff; }
+        .halloween-theme button:hover { background:#e06615; }
+        .halloween-theme h1 { text-shadow:0 0 10px #ff7518; }
+
+        .christmas-theme {
+            background:#87CEEB; color:#fff;
+            background-image:linear-gradient(to bottom,#87CEEB,#4682B4);
         }
-        .halloween-theme button {
-            background-color: #ff7518;
-            color: #fff;
+        .christmas-theme .iframe-container { background:#fff; box-shadow:0 0 10px rgba(0,0,0,.2); }
+        .christmas-theme button { background:#c0392b; }
+        .christmas-theme button:hover { background:#a93226; }
+        .christmas-theme h1 { text-shadow:0 0 10px #fff; }
+
+        /* ---------- CHRISTMAS LIGHTS (REAL PNG) ---------- */
+        .christmas-lights {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 50px;
+            background: url('https://i.imgur.com/9t3hR5P.png') repeat-x center/40px 40px;
+            z-index: 4;
+            display: none;
+            filter: hue-rotate(0deg);
+            animation: swapLights 2s infinite;
         }
-        .halloween-theme button:hover {
-            background-color: #e06615;
-        }
-        .halloween-theme h1 {
-            text-shadow: 0 0 10px #ff7518;
+        @keyframes swapLights {
+            0%, 49%   { filter: hue-rotate(0deg); }   /* red to green */
+            50%, 100% { filter: hue-rotate(120deg); } /* green to red */
         }
 
         .halloween-decoration {
             position: fixed;
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: transform .3s;
             z-index: 2;
         }
-        .halloween-decoration:hover {
-            transform: scale(1.2);
-        }
+        .halloween-decoration:hover { transform: scale(1.2); }
         .pumpkin-bottom-left {
-            bottom: 15px;
-            left: 15px;
-            background: url('https://img.icons8.com/color/48/000000/pumpkin.png') no-repeat center;
-            background-size: contain;
+            bottom:15px; left:15px;
+            background:url('https://img.icons8.com/color/48/000000/pumpkin.png') no-repeat center/contain;
         }
         .candy-bottom-right {
-            bottom: 15px;
-            right: 15px;
-            background: url('https://img.icons8.com/color/48/000000/candy.png') no-repeat center;
-            background-size: contain;
+            bottom:15px; right:15px;
+            background:url('https://img.icons8.com/color/48/000000/candy.png') no-repeat center/contain;
         }
-        .shake {
-            animation: shake 0.5s;
-        }
+        .shake { animation: shake .5s; }
         @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* Christmas Theme */
-        .christmas-theme {
-            background-color: #87CEEB;
-            color: #fff;
-            background-image: linear-gradient(to bottom, #87CEEB, #4682B4);
-        }
-        .christmas-theme .iframe-container {
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        .christmas-theme button {
-            background-color: #c0392b;
-        }
-        .christmas-theme button:hover {
-            background-color: #a93226;
-        }
-        .christmas-theme h1 {
-            text-shadow: 0 0 10px #fff;
-        }
-
-        .christmas-lights {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            background: repeating-linear-gradient(
-                45deg,
-                #ff0000,
-                #ff0000 10px,
-                #00ff00 10px,
-                #00ff00 20px
-            );
-            animation: swapColors 1s infinite;
-            z-index: 4;
-        }
-        @keyframes swapColors {
-            0% { background-position: 0 0; }
-            50% { background-position: 20px 0; }
-            100% { background-position: 0 0; }
+            0%{transform:translateX(0)}25%{transform:translateX(-5px)}
+            50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}
         }
 
         .snowflake {
-            position: fixed;
-            color: #fff;
-            font-size: 1em;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px #000;
-            pointer-events: none;
-            animation: fall linear infinite;
-            z-index: 0;
+            position:fixed; color:#fff; font-size:1em;
+            text-shadow:0 0 5px #000; pointer-events:none;
+            animation:fall linear infinite; z-index:0;
         }
         @keyframes fall {
-            0% { transform: translateY(-10vh); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0.5; }
+            0%{transform:translateY(-10vh);opacity:1}
+            100%{transform:translateY(100vh);opacity:.5}
         }
     </style>
 </head>
 <body>
-    <div class="christmas-lights" style="display: none;"></div>
-    <h1>Huna 7</h1>
+    <div class="christmas-lights"></div>
+
+    <h1>Nyx</h1>
+
     <div class="iframe-container">
-        <!-- EMBEDDED SITE: https://xn--d28h.noodles.gq -->
-        <iframe src="https://xn--d28h.noodles.gq" title="Huna 7 - Proxy" allowfullscreen sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
+        <iframe src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
     </div>
+
     <div class="controls">
         <button onclick="setTheme('midnight')">Midnight</button>
         <button onclick="setTheme('night')">Night</button>
@@ -232,92 +168,76 @@
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank</button>
     </div>
-    <div class="halloween-decoration pumpkin-bottom-left" style="display: none;" onclick="animateDecoration(this)"></div>
-    <div class="halloween-decoration candy-bottom-right" style="display: none;" onclick="animateDecoration(this)"></div>
+
+    <div class="halloween-decoration pumpkin-bottom-left" onclick="animateDecoration(this)"></div>
+    <div class="halloween-decoration candy-bottom-right" onclick="animateDecoration(this)"></div>
 
     <script>
-        // Theme management
+        // ---------- THEME ----------
         function setTheme(theme) {
             document.body.className = '';
             document.querySelector('.christmas-lights').style.display = 'none';
-            document.querySelector('.pumpkin-bottom-left').style.display = 'none';
-            document.querySelector('.candy-bottom-right').style.display = 'none';
-            document.querySelectorAll('.snowflake').forEach(s => s.remove());
+            document.querySelectorAll('.halloween-decoration').forEach(d=>d.style.display='none');
+            document.querySelectorAll('.snowflake').forEach(s=>s.remove());
 
-            if (theme === 'night') {
-                document.body.classList.add('night-theme');
-            } else if (theme === 'light') {
-                document.body.classList.add('light-theme');
-            } else if (theme === 'halloween') {
+            if (theme==='night')   document.body.classList.add('night-theme');
+            else if (theme==='light')   document.body.classList.add('light-theme');
+            else if (theme==='halloween'){
                 document.body.classList.add('halloween-theme');
-                document.querySelector('.pumpkin-bottom-left').style.display = 'block';
-                document.querySelector('.candy-bottom-right').style.display = 'block';
-            } else if (theme === 'christmas') {
+                document.querySelectorAll('.halloween-decoration').forEach(d=>d.style.display='block');
+            }
+            else if (theme==='christmas'){
                 document.body.classList.add('christmas-theme');
                 document.querySelector('.christmas-lights').style.display = 'block';
                 startSnowfall();
-            } else {
-                document.body.classList.add('midnight-theme');
             }
+            else document.body.classList.add('midnight-theme');
+
             localStorage.setItem('theme', theme);
         }
 
-        window.onload = function() {
-            const savedTheme = localStorage.getItem('theme') || 'midnight';
-            setTheme(savedTheme);
-        };
+        window.onload = () => setTheme(localStorage.getItem('theme') || 'midnight');
 
-        function animateDecoration(element) {
-            element.style.transform = 'scale(1.5)';
-            element.classList.add('shake');
-            setTimeout(() => {
-                element.style.transform = 'scale(1)';
-                element.classList.remove('shake');
-            }, 500);
+        // ---------- DECORATIONS ----------
+        function animateDecoration(el){
+            el.style.transform='scale(1.5)'; el.classList.add('shake');
+            setTimeout(()=>{ el.style.transform='scale(1)'; el.classList.remove('shake'); },500);
         }
 
-        function startSnowfall() {
-            for (let i = 0; i < 50; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.innerHTML = '❄';
-                snowflake.style.left = Math.random() * 100 + 'vw';
-                snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
-                document.body.appendChild(snowflake);
+        function startSnowfall(){
+            for(let i=0;i<50;i++){
+                const s=document.createElement('div');
+                s.className='snowflake'; s.innerHTML='snowflake';
+                s.style.left=Math.random()*100+'vw';
+                s.style.animationDuration=Math.random()*5+5+'s';
+                s.style.animationDelay=Math.random()*5+'s';
+                document.body.appendChild(s);
             }
         }
 
-        function applyTabCloaking() {
-            document.title = 'My Drive - Google Drive';
-            const favicon = document.createElement('link');
-            favicon.rel = 'icon';
-            favicon.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
-            const old = document.querySelector("link[rel='icon']");
-            if (old) old.remove();
-            document.head.appendChild(favicon);
+        // ---------- CLOAKING ----------
+        function applyTabCloaking(){
+            document.title='My Drive - Google Drive';
+            const link=document.createElement('link');
+            link.rel='icon'; link.href='https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+            const old=document.querySelector("link[rel='icon']");
+            if(old) old.remove();
+            document.head.appendChild(link);
             alert('Tab cloaked as Google Drive');
         }
 
-        function applyAboutBlankCloaking() {
-            const win = window.open('about:blank', '_blank');
-            if (win) {
-                const doc = win.document;
-                doc.open();
-                doc.write(`
-                    <!DOCTYPE html>
-                    <html><head><title>Huna 7</title>
-                    <style>body,html{margin:0;height:100%;overflow:hidden}
-                    iframe{width:100%;height:100%;border:none}</style>
-                    </head>
-                    <body><iframe src="${location.href}" allowfullscreen></iframe></body>
-                    </html>
-                `);
-                doc.close();
-                alert('Loaded in about:blank (stealth mode)');
-            } else {
-                alert('Popup blocked! Allow popups to use About:Blank.');
-            }
+        function applyAboutBlankCloaking(){
+            const win=window.open('about:blank','_blank');
+            if(win){
+                const d=win.document;
+                d.open();
+                d.write(`<!DOCTYPE html><html><head><title>Nyx</title>
+                <style>body,html{margin:0;height:100%;overflow:hidden}
+                iframe{width:100%;height:100%;border:none}</style></head>
+                <body><iframe src="${location.href}" allowfullscreen></iframe></body></html>`);
+                d.close();
+                alert('Loaded in about:blank');
+            }else alert('Popup blocked! Allow popups.');
         }
     </script>
 </body>
