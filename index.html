@@ -6,7 +6,7 @@
     <title>Huna 7</title>
     <style>
         body {
-            background-color: #392d55; /* Midnight theme */
+            background-color: #392d55;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             display: flex;
@@ -24,7 +24,7 @@
             font-size: 3em;
             margin: 20px 0;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            z-index: 3; /* Ensure title is above decorations */
+            z-index: 3;
         }
         .iframe-container {
             width: 90%;
@@ -50,7 +50,7 @@
             gap: 15px;
             justify-content: center;
             margin-bottom: 20px;
-            z-index: 3; /* Ensure buttons are above decorations */
+            z-index: 3;
         }
         button {
             padding: 12px 24px;
@@ -68,6 +68,7 @@
             background-color: #6b5a8e;
             transform: scale(1.05);
         }
+
         /* Night Theme */
         .night-theme {
             background-color: #1c162f;
@@ -82,6 +83,7 @@
         .night-theme button:hover {
             background-color: #5c4b7d;
         }
+
         /* Light Theme */
         .light-theme {
             background-color: #f0f0f0;
@@ -101,6 +103,7 @@
         .light-theme h1 {
             text-shadow: none;
         }
+
         /* Halloween Theme */
         .halloween-theme {
             background-color: #1a1a1a;
@@ -120,6 +123,7 @@
         .halloween-theme h1 {
             text-shadow: 0 0 10px #ff7518;
         }
+
         .halloween-decoration {
             position: fixed;
             width: 60px;
@@ -153,6 +157,7 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
+
         /* Christmas Theme */
         .christmas-theme {
             background-color: #87CEEB;
@@ -172,6 +177,7 @@
         .christmas-theme h1 {
             text-shadow: 0 0 10px #fff;
         }
+
         .christmas-lights {
             position: fixed;
             top: 0;
@@ -193,6 +199,7 @@
             50% { background-position: 20px 0; }
             100% { background-position: 0 0; }
         }
+
         .snowflake {
             position: fixed;
             color: #fff;
@@ -213,8 +220,8 @@
     <div class="christmas-lights" style="display: none;"></div>
     <h1>Huna 7</h1>
     <div class="iframe-container">
-        <!-- EMBEDDED SITE: https://edu.smartinnovation.md/ -->
-        <iframe src="https://edu.smartinnovation.md/" title="Smart Innovation Education Platform" allowfullscreen></iframe>
+        <!-- EMBEDDED SITE: https://xn--d28h.noodles.gq -->
+        <iframe src="https://xn--d28h.noodles.gq" title="Huna 7 - Proxy" allowfullscreen sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
     </div>
     <div class="controls">
         <button onclick="setTheme('midnight')">Midnight</button>
@@ -223,18 +230,20 @@
         <button onclick="setTheme('halloween')">Halloween</button>
         <button onclick="setTheme('christmas')">Christmas</button>
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
-        <button onclick="applyAboutBlankCloaking()">About:Blank Cloaking</button>
+        <button onclick="applyAboutBlankCloaking()">About:Blank</button>
     </div>
     <div class="halloween-decoration pumpkin-bottom-left" style="display: none;" onclick="animateDecoration(this)"></div>
     <div class="halloween-decoration candy-bottom-right" style="display: none;" onclick="animateDecoration(this)"></div>
+
     <script>
         // Theme management
         function setTheme(theme) {
-            document.body.className = ''; // Reset classes
+            document.body.className = '';
             document.querySelector('.christmas-lights').style.display = 'none';
             document.querySelector('.pumpkin-bottom-left').style.display = 'none';
             document.querySelector('.candy-bottom-right').style.display = 'none';
             document.querySelectorAll('.snowflake').forEach(s => s.remove());
+
             if (theme === 'night') {
                 document.body.classList.add('night-theme');
             } else if (theme === 'light') {
@@ -251,16 +260,13 @@
                 document.body.classList.add('midnight-theme');
             }
             localStorage.setItem('theme', theme);
-            console.log(`Theme set to: ${theme}`);
         }
 
-        // Load saved theme
         window.onload = function() {
             const savedTheme = localStorage.getItem('theme') || 'midnight';
             setTheme(savedTheme);
         };
 
-        // Halloween decoration animation
         function animateDecoration(element) {
             element.style.transform = 'scale(1.5)';
             element.classList.add('shake');
@@ -270,7 +276,6 @@
             }, 500);
         }
 
-        // Christmas snowfall
         function startSnowfall() {
             for (let i = 0; i < 50; i++) {
                 const snowflake = document.createElement('div');
@@ -283,43 +288,35 @@
             }
         }
 
-        // Tab cloaking
         function applyTabCloaking() {
-            document.title = 'Google';
+            document.title = 'My Drive - Google Drive';
             const favicon = document.createElement('link');
             favicon.rel = 'icon';
-            favicon.href = 'https://www.google.com/favicon.ico';
-            // Remove any existing favicon
-            const existingFavicon = document.querySelector("link[rel='icon']");
-            if (existingFavicon) existingFavicon.remove();
+            favicon.href = 'https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png';
+            const old = document.querySelector("link[rel='icon']");
+            if (old) old.remove();
             document.head.appendChild(favicon);
-            alert('Tab cloaking applied: Title set to "Google" with Google favicon.');
+            alert('Tab cloaked as Google Drive');
         }
 
-        // About:Blank cloaking
         function applyAboutBlankCloaking() {
-            const newWindow = window.open('about:blank', '_blank');
-            if (newWindow) {
-                const doc = newWindow.document;
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                const doc = win.document;
                 doc.open();
                 doc.write(`
-                    <html>
-                        <head>
-                            <title>Huna 7 - Smart Innovation</title>
-                            <style>
-                                body, html { margin:0; padding:0; height:100%; overflow:hidden; }
-                                iframe { width:100%; height:100%; border:none; }
-                            </style>
-                        </head>
-                        <body>
-                            <iframe src="${window.location.href}" allowfullscreen></iframe>
-                        </body>
+                    <!DOCTYPE html>
+                    <html><head><title>Huna 7</title>
+                    <style>body,html{margin:0;height:100%;overflow:hidden}
+                    iframe{width:100%;height:100%;border:none}</style>
+                    </head>
+                    <body><iframe src="${location.href}" allowfullscreen></iframe></body>
                     </html>
                 `);
                 doc.close();
-                alert('About:Blank cloaking applied: Page loaded in an about:blank window.');
+                alert('Loaded in about:blank (stealth mode)');
             } else {
-                alert('Failed to open about:blank window. Ensure pop-ups are allowed.');
+                alert('Popup blocked! Allow popups to use About:Blank.');
             }
         }
     </script>
