@@ -68,7 +68,6 @@
             background-color: #6b5a8e;
             transform: scale(1.05);
         }
-
         /* Night Theme */
         .night-theme {
             background-color: #1c162f;
@@ -83,7 +82,6 @@
         .night-theme button:hover {
             background-color: #5c4b7d;
         }
-
         /* Light Theme */
         .light-theme {
             background-color: #f0f0f0;
@@ -103,7 +101,6 @@
         .light-theme h1 {
             text-shadow: none;
         }
-
         /* Halloween Theme */
         .halloween-theme {
             background-color: #1a1a1a;
@@ -156,7 +153,6 @@
             75% { transform: translateX(-5px); }
             100% { transform: translateX(0); }
         }
-
         /* Christmas Theme */
         .christmas-theme {
             background-color: #87CEEB;
@@ -217,7 +213,8 @@
     <div class="christmas-lights" style="display: none;"></div>
     <h1>Huna 7</h1>
     <div class="iframe-container">
-        <iframe src="https://duckduckgo.com/" title="DuckDuckGo Search"></iframe>
+        <!-- EMBEDDED SITE: https://edu.smartinnovation.md/ -->
+        <iframe src="https://edu.smartinnovation.md/" title="Smart Innovation Education Platform" allowfullscreen></iframe>
     </div>
     <div class="controls">
         <button onclick="setTheme('midnight')">Midnight</button>
@@ -230,7 +227,6 @@
     </div>
     <div class="halloween-decoration pumpkin-bottom-left" style="display: none;" onclick="animateDecoration(this)"></div>
     <div class="halloween-decoration candy-bottom-right" style="display: none;" onclick="animateDecoration(this)"></div>
-
     <script>
         // Theme management
         function setTheme(theme) {
@@ -239,7 +235,6 @@
             document.querySelector('.pumpkin-bottom-left').style.display = 'none';
             document.querySelector('.candy-bottom-right').style.display = 'none';
             document.querySelectorAll('.snowflake').forEach(s => s.remove());
-
             if (theme === 'night') {
                 document.body.classList.add('night-theme');
             } else if (theme === 'light') {
@@ -256,14 +251,13 @@
                 document.body.classList.add('midnight-theme');
             }
             localStorage.setItem('theme', theme);
-            console.log(`Theme set to: ${theme}`); // Debug theme change
+            console.log(`Theme set to: ${theme}`);
         }
 
         // Load saved theme
         window.onload = function() {
             const savedTheme = localStorage.getItem('theme') || 'midnight';
             setTheme(savedTheme);
-            console.log('Controls loaded:', document.querySelectorAll('.controls button').length, 'buttons'); // Debug button count
         };
 
         // Halloween decoration animation
@@ -295,6 +289,9 @@
             const favicon = document.createElement('link');
             favicon.rel = 'icon';
             favicon.href = 'https://www.google.com/favicon.ico';
+            // Remove any existing favicon
+            const existingFavicon = document.querySelector("link[rel='icon']");
+            if (existingFavicon) existingFavicon.remove();
             document.head.appendChild(favicon);
             alert('Tab cloaking applied: Title set to "Google" with Google favicon.');
         }
@@ -308,10 +305,14 @@
                 doc.write(`
                     <html>
                         <head>
-                            <title>Huna 7</title>
+                            <title>Huna 7 - Smart Innovation</title>
+                            <style>
+                                body, html { margin:0; padding:0; height:100%; overflow:hidden; }
+                                iframe { width:100%; height:100%; border:none; }
+                            </style>
                         </head>
-                        <body style="margin:0;">
-                            <iframe src="${window.location.href}" style="width:100%;height:100vh;border:none;"></iframe>
+                        <body>
+                            <iframe src="${window.location.href}" allowfullscreen></iframe>
                         </body>
                     </html>
                 `);
