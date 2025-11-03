@@ -7,7 +7,7 @@
     <style>
         body {
             background: #000;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%,, rgba(0,0,0,0.98) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 100%);
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             display: flex;
@@ -26,16 +26,28 @@
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
             z-index: 3;
         }
+
+        /* TOP NAV: Nyx & Tortilla */
+        .nav-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 10px 0 5px;
+            z-index: 3;
+        }
+
+        /* MISC CONTROLS: Reload, Cloak, etc. */
         .controls {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             justify-content: center;
-            margin: 15px 0;
+            margin: 5px 0 15px;
             z-index: 3;
         }
+
         button {
-            padding: 10px 20px;
+            padding: 10px 22px;
             border: none;
             border-radius: 8px;
             background-color: #222;
@@ -43,35 +55,41 @@
             font-size: 1em;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color .2s, transform .2s;
+            transition: all .2s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,.3);
         }
         button:hover {
             background-color: #333;
-            transform: scale(1.05);
+            transform: translateY(-1px);
         }
         button.active {
             background-color: #444;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+            box-shadow: 0 0 12px rgba(100,200,255,0.4);
+            transform: scale(1.03);
         }
+
+        /* IFRAME CONTAINER - SMOOTH EDGES */
         .iframe-container {
             width: 90%;
             max-width: 1200px;
             height: 65vh;
             background-color: #111;
             padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            border-radius: 16px; /* Smooth outer */
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
             margin: 10px 0;
             z-index: 1;
+            overflow: hidden; /* Ensures iframe corners are clipped */
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px; /* Smooth inner */
             background-color: #fff;
+            display: block;
         }
+
         canvas {
             position: fixed;
             top: 0;
@@ -81,49 +99,116 @@
             z-index: 0;
             pointer-events: none;
         }
+
+        /* ABOUT:BLANK OVERLAY (for Tortilla) */
+        #tortilla-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            transition: opacity 0.4s ease;
+        }
+        #tortilla-overlay h1 {
+            font-size: 3.5em;
+            margin: 0 0 20px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+        #tortilla-overlay h3 {
+            font-size: 1.5em;
+            margin: 0;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
     <canvas id="orbCanvas"></canvas>
     <h1>Nyx</h1>
 
-    <!-- CONTROL BUTTONS (above iframe) -->
+    <!-- TOP: NYX & TORTILLA BUTTONS -->
+    <div class="nav-bar">
+        <button id="btnNyx" class="active" onclick="loadNyx()">Nyx</button>
+        <button id="btnTortilla" onclick="showTortillaOverlay()">Tortilla</button>
+    </div>
+
+    <!-- MISC: RELOAD, CLOAK, ABOUT:BLANK -->
     <div class="controls">
-        <button id="loadNyx" onclick="loadEmbed('https://nyxx.pages.dev', 'Nyx')">Nyx</button>
-        <button id="loadTortilla" onclick="loadEmbed('https://tortillagames.org/', 'Tortilla')">Tortilla</button>
         <button onclick="reloadEmbed()">Reload Embed</button>
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank</button>
     </div>
 
+    <!-- IFRAME EMBED -->
     <div class="iframe-container">
         <iframe id="embedFrame" src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
                 sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
     </div>
 
+    <!-- TORTILLA OVERLAY (Click to open in about:blank) -->
+    <div id="tortilla-overlay" style="display:none;">
+        <h1>Tortilla</h1>
+        <h3>Click anywhere to open Tortilla...</h3>
+    </div>
+
     <script>
         const iframe = document.getElementById('embedFrame');
-        const nyxBtn = document.getElementById('loadNyx');
-        const tortillaBtn = document.getElementById('loadTortilla');
+        const btnNyx = document.getElementById('btnNyx');
+        const btnTortilla = document.getElementById('btnTortilla');
+        const overlay = document.getElementById('tortilla-overlay');
 
-        // Load embed and update active button
-        function loadEmbed(url, name) {
-            iframe.src = url;
-            document.querySelector('h1').textContent = name;
-
-            // Update active button style
-            nyxBtn.classList.remove('active');
-            tortillaBtn.classList.remove('active');
-            if (name === 'Nyx') nyxBtn.classList.add('active');
-            if (name === 'Tortilla') tortillaBtn.classList.add('active');
+        // Load Nyx directly
+        function loadNyx() {
+            iframe.src = 'https://nyxx.pages.dev';
+            document.querySelector('h1').textContent = 'Nyx';
+            btnNyx.classList.add('active');
+            btnTortilla.classList.remove('active');
+            overlay.style.display = 'none';
         }
+
+        // Show Tortilla overlay
+        function showTortillaOverlay() {
+            overlay.style.display = 'flex';
+            btnTortilla.classList.add('active');
+            btnNyx.classList.remove('active');
+            document.querySelector('h1').textContent = 'Tortilla';
+        }
+
+        // Click overlay → open Tortilla in about:blank
+        overlay.addEventListener('click', () => {
+            const win = window.open('about:blank', '_blank');
+            if (!win) {
+                alert('Popup blocked! Please allow popups.');
+                return;
+            }
+            const d = win.document;
+            d.open();
+            d.write(`<!DOCTYPE html>
+<html><head><title>Tortilla</title>
+<style>
+  body,html{margin:0;height:100%;overflow:hidden;background:#111;}
+  iframe{width:100%;height:100%;border:none;border-radius:12px;}
+</style>
+</head><body>
+<iframe src="https://tortillagames.org/" allowfullscreen></iframe>
+</body></html>`);
+            d.close();
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 400);
+        });
 
         // Reload current embed
         function reloadEmbed() {
             iframe.src = iframe.src;
         }
 
-        // Tab Cloaking (Google Drive)
+        // Tab Cloaking
         function applyTabCloaking() {
             document.title = 'My Drive - Google Drive';
             const link = document.createElement('link');
@@ -226,9 +311,6 @@
         setInterval(() => {
             if (orbs.length < maxOrbs) orbs.push(new Orb());
         }, 800);
-
-        // Set Nyx as default active
-        nyxBtn.classList.add('active');
     </script>
 </body>
 </html>
