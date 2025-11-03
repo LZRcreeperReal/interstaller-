@@ -26,24 +26,6 @@
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
             z-index: 3;
         }
-        .iframe-container {
-            width: 90%;
-            max-width: 1200px;
-            height: 65vh;
-            background-color: #111;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.7);
-            margin: 10px 0;
-            z-index: 1;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 5px;
-            background-color: #fff;
-        }
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -68,8 +50,24 @@
             background-color: #333;
             transform: scale(1.05);
         }
-
-        /* Canvas for orbs and connections */
+        .iframe-container {
+            width: 90%;
+            max-width: 1200px;
+            height: 65vh;
+            background-color: #111;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
+            margin: 10px 0;
+            z-index: 1;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+        }
         canvas {
             position: fixed;
             top: 0;
@@ -84,14 +82,18 @@
 <body>
     <canvas id="orbCanvas"></canvas>
     <h1>Nyx</h1>
-    <div class="iframe-container">
-        <iframe id="embedFrame" src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
-                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
-    </div>
+
+    <!-- BUTTON BAR (now above the iframe) -->
     <div class="controls">
         <button onclick="reloadEmbed()">Reload Embed</button>
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank</button>
+        <button onclick="applyTortillaCloaking()">Tortilla</button>
+    </div>
+
+    <div class="iframe-container">
+        <iframe id="embedFrame" src="https://nyxx.pages.dev" title="Nyx" allowfullscreen
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
     </div>
 
     <script>
@@ -101,7 +103,7 @@
             iframe.src = iframe.src;
         }
 
-        // ---------- CLOAKING ----------
+        // ---------- TAB CLOAKING ----------
         function applyTabCloaking() {
             document.title = 'My Drive - Google Drive';
             const link = document.createElement('link');
@@ -112,6 +114,7 @@
             document.head.appendChild(link);
         }
 
+        // ---------- ABOUT:BLANK (original Nyx) ----------
         function applyAboutBlankCloaking() {
             const win = window.open('about:blank', '_blank');
             if (win) {
@@ -125,6 +128,25 @@
             } else {
                 alert('Popup blocked! Allow popups.');
             }
+        }
+
+        // ---------- TORTILLA CLOAKING ----------
+        function applyTortillaCloaking() {
+            const win = window.open('about:blank', '_blank');
+            if (!win) {
+                alert('Popup blocked! Please allow popups for this site.');
+                return;
+            }
+            const d = win.document;
+            d.open();
+            d.write(`<!DOCTYPE html>
+<html><head><title>Tortilla</title>
+<style>body,html{margin:0;height:100%;overflow:hidden}
+iframe{width:100%;height:100%;border:none}</style>
+</head><body>
+<iframe src="https://tortillagames.org/" allowfullscreen></iframe>
+</body></html>`);
+            d.close();
         }
 
         // ---------- ORBS & CONNECTIONS ----------
@@ -168,9 +190,7 @@
         }
 
         function initOrbs() {
-            while (orbs.length < maxOrbs) {
-                orbs.push(new Orb());
-            }
+            while (orbs.length < maxOrbs) orbs.push(new Orb());
         }
 
         function drawConnections() {
@@ -195,10 +215,7 @@
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            orbs.forEach(orb => {
-                orb.update();
-                orb.draw();
-            });
+            orbs.forEach(orb => { orb.update(); orb.draw(); });
             drawConnections();
             requestAnimationFrame(animate);
         }
@@ -206,11 +223,9 @@
         initOrbs();
         animate();
 
-        // Gradually add more orbs over time
+        // Gradually add more orbs
         setInterval(() => {
-            if (orbs.length < maxOrbs) {
-                orbs.push(new Orb());
-            }
+            if (orbs.length < maxOrbs) orbs.push(new Orb());
         }, 800);
     </script>
 </body>
