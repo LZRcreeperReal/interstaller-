@@ -7,7 +7,7 @@
     <style>
         body {
             background: #000;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.98) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.02) 0%,, rgba(0,0,0,0.98) 100%);
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             display: flex;
@@ -50,6 +50,10 @@
             background-color: #333;
             transform: scale(1.05);
         }
+        button.active {
+            background-color: #444;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
         .iframe-container {
             width: 90%;
             max-width: 1200px;
@@ -83,12 +87,13 @@
     <canvas id="orbCanvas"></canvas>
     <h1>Nyx</h1>
 
-    <!-- BUTTON BAR (now above the iframe) -->
+    <!-- CONTROL BUTTONS (above iframe) -->
     <div class="controls">
+        <button id="loadNyx" onclick="loadEmbed('https://nyxx.pages.dev', 'Nyx')">Nyx</button>
+        <button id="loadTortilla" onclick="loadEmbed('https://tortillagames.org/', 'Tortilla')">Tortilla</button>
         <button onclick="reloadEmbed()">Reload Embed</button>
         <button onclick="applyTabCloaking()">Tab Cloaking</button>
         <button onclick="applyAboutBlankCloaking()">About:Blank</button>
-        <button onclick="applyTortillaCloaking()">Tortilla</button>
     </div>
 
     <div class="iframe-container">
@@ -97,13 +102,28 @@
     </div>
 
     <script>
-        // ---------- RELOAD EMBED ----------
+        const iframe = document.getElementById('embedFrame');
+        const nyxBtn = document.getElementById('loadNyx');
+        const tortillaBtn = document.getElementById('loadTortilla');
+
+        // Load embed and update active button
+        function loadEmbed(url, name) {
+            iframe.src = url;
+            document.querySelector('h1').textContent = name;
+
+            // Update active button style
+            nyxBtn.classList.remove('active');
+            tortillaBtn.classList.remove('active');
+            if (name === 'Nyx') nyxBtn.classList.add('active');
+            if (name === 'Tortilla') tortillaBtn.classList.add('active');
+        }
+
+        // Reload current embed
         function reloadEmbed() {
-            const iframe = document.getElementById('embedFrame');
             iframe.src = iframe.src;
         }
 
-        // ---------- TAB CLOAKING ----------
+        // Tab Cloaking (Google Drive)
         function applyTabCloaking() {
             document.title = 'My Drive - Google Drive';
             const link = document.createElement('link');
@@ -114,7 +134,7 @@
             document.head.appendChild(link);
         }
 
-        // ---------- ABOUT:BLANK (original Nyx) ----------
+        // About:Blank (current page)
         function applyAboutBlankCloaking() {
             const win = window.open('about:blank', '_blank');
             if (win) {
@@ -128,25 +148,6 @@
             } else {
                 alert('Popup blocked! Allow popups.');
             }
-        }
-
-        // ---------- TORTILLA CLOAKING ----------
-        function applyTortillaCloaking() {
-            const win = window.open('about:blank', '_blank');
-            if (!win) {
-                alert('Popup blocked! Please allow popups for this site.');
-                return;
-            }
-            const d = win.document;
-            d.open();
-            d.write(`<!DOCTYPE html>
-<html><head><title>Tortilla</title>
-<style>body,html{margin:0;height:100%;overflow:hidden}
-iframe{width:100%;height:100%;border:none}</style>
-</head><body>
-<iframe src="https://tortillagames.org/" allowfullscreen></iframe>
-</body></html>`);
-            d.close();
         }
 
         // ---------- ORBS & CONNECTIONS ----------
@@ -222,11 +223,12 @@ iframe{width:100%;height:100%;border:none}</style>
 
         initOrbs();
         animate();
-
-        // Gradually add more orbs
         setInterval(() => {
             if (orbs.length < maxOrbs) orbs.push(new Orb());
         }, 800);
+
+        // Set Nyx as default active
+        nyxBtn.classList.add('active');
     </script>
 </body>
 </html>
